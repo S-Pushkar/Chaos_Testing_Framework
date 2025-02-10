@@ -1,23 +1,23 @@
 # Faults to inject into containers
-- Remove node(s) directly using "docker stop <container_id>"
-- Intrduce network failures using "docker network disconnect <network_id> <container_id>"
-- Introduce CPU and memory failures using "docker update --cpus 0.5 --memory 100m <container_id>"
-- Introduce disk failures using "docker update --storage-opt size=100m <container_id>"
-- Introduce latency using "tc qdisc add dev eth0 root netem delay 100ms"
-- Introduce packet loss using "tc qdisc add dev eth0 root netem loss 50%"
-- Introduce packet corruption using "tc qdisc add dev eth0 root netem corrupt 0.1%"
-- Introduce packet duplication using "tc qdisc add dev eth0 root netem duplicate 1%"
-- Introduce packet reordering using "tc qdisc add dev eth0 root netem delay 100ms reorder 25% 50%"
-- Introduce bandwidth limitations using "tc qdisc add dev eth0 root tbf rate 1mbit burst 32kbit latency 400ms"
-- Introduce network partitioning using "iptables -A INPUT -s <container_ip> -j DROP"
-- Introduce network partitioning using "iptables -A OUTPUT -d <container_ip> -j DROP"
-- Introduce network partitioning using "iptables -A INPUT -s <container_ip> -j REJECT"
-- Introduce network partitioning using "iptables -A OUTPUT -d <container_ip> -j REJECT"
-- Introduce network partitioning using "iptables -A INPUT -s <container_ip> -j REJECT --reject-with icmp-host-unreachable"
-- Introduce network partitioning using "iptables -A OUTPUT -d <container_ip> -j REJECT --reject-with icmp-host-unreachable"
-- Introduce network partitioning using "iptables -A INPUT -s <container_ip> -j REJECT --reject-with icmp-port-unreachable"
-- Introduce network partitioning using "iptables -A OUTPUT -d <container_ip> -j REJECT --reject-with icmp-port-unreachable"
-- Introduce network partitioning using "iptables -A INPUT -s <container_ip> -j REJECT --reject-with icmp-proto-unreachable"
-- Introduce network partitioning using "iptables -A OUTPUT -d <container_ip> -j REJECT --reject-with icmp-proto-unreachable"
-- Introduce network partitioning using "iptables -A INPUT -s <container_ip> -j REJECT --reject-with icmp-net-unreachable"
-- Introduce network partitioning using "iptables -A OUTPUT -d <container_ip> -j REJECT --reject-with icmp-net-unreachable"
+- Remove node(s) directly using `docker stop <container_id>`
+- Intrduce network failures using `docker network disconnect <network_id> <container_id>`
+- Introduce CPU and memory failures using `docker update --cpus 0.5 --memory 100m <container_id>`
+- Introduce disk failures using `docker update --storage-opt size=100m <container_id>`
+- Introduce latency using `tc qdisc add dev eth0 root netem delay 100ms`
+- Introduce packet loss using `tc qdisc add dev eth0 root netem loss 50%`
+- Introduce packet corruption using `tc qdisc add dev eth0 root netem corrupt 0.1%`
+- Introduce packet duplication using `tc qdisc add dev eth0 root netem duplicate 1%`
+- Introduce packet reordering using `tc qdisc add dev eth0 root netem delay 100ms reorder 25% 50%`
+- Introduce bandwidth limitations using `tc qdisc add dev eth0 root tbf rate 1mbit burst 32kbit latency 400ms`
+- Introduce network partitioning using `iptables -A INPUT -s <container_ip> -j DROP`
+- Introduce network partitioning using `iptables -A OUTPUT -d <container_ip> -j DROP`
+- Introduce network partitioning using `iptables -A INPUT -s <container_ip> -j REJECT`
+- Introduce network partitioning using `iptables -A OUTPUT -d <container_ip> -j REJECT`
+- Introduce network partitioning using `iptables -A INPUT -s <container_ip> -j REJECT --reject-with icmp-host-unreachable`
+- Introduce network partitioning using `iptables -A OUTPUT -d <container_ip> -j REJECT --reject-with icmp-host-unreachable`
+- Introduce network partitioning using `iptables -A INPUT -s <container_ip> -j REJECT --reject-with icmp-port-unreachable`
+- Introduce network partitioning using `iptables -A OUTPUT -d <container_ip> -j REJECT --reject-with icmp-port-unreachable`
+- Introduce network partitioning using `iptables -A INPUT -s <container_ip> -j REJECT --reject-with icmp-proto-unreachable`
+- Introduce network partitioning using `iptables -A OUTPUT -d <container_ip> -j REJECT --reject-with icmp-proto-unreachable`
+- Introduce network partitioning using `iptables -A INPUT -s <container_ip> -j REJECT --reject-with icmp-net-unreachable`
+- Introduce network partitioning using `iptables -A OUTPUT -d <container_ip> -j REJECT --reject-with icmp-net-unreachable`
