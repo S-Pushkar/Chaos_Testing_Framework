@@ -1,0 +1,26 @@
+{
+    "networks": [
+        "network1",
+        "network2"
+    ],
+    "volumes": [
+        "volume1",
+        "volume2"
+    ],
+    "services": [
+        {
+            "service-image-name": "username/image",
+            "service-name": "name",
+            "volumes": [
+                {
+                    "source-volume": "volume1",
+                    "path-in-container": "/root/bin"
+                }
+            ],
+            "networks": [
+                "network1"
+            ],
+            "ram-in-bytes": 31314
+        }
+    ]
+}
