@@ -1,4 +1,5 @@
 {
+    "config-name": "network_demoralizer",
     "networks": [
         "network1",
         "network2"
@@ -20,6 +21,9 @@
             "networks": [
                 "network1"
             ],
+            "environment": {
+                "key": "value"
+            },
             "ram-in-bytes": 31314
         }
     ]
