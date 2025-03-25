@@ -1,20 +1,12 @@
 {
-    "config-name": "network_demoralizer",
-    "networks": [
-        "network1",
-        "network2"
-    ],
-    "volumes": [
-        "volume1",
-        "volume2"
-    ],
+    "config_name": "network_demoralizer",
     "services": [
         {
-            "container-name": "name",
+            "container_name": "name",
             "volumes": [
                 {
-                    "source-volume": "volume1",
-                    "path-in-container": "/root/bin"
+                    "source_volume": "volume1",
+                    "path_in_container": "/root/bin"
                 }
             ],
             "networks": [
@@ -23,3 +15,4 @@
         }
     ]
 }
+
