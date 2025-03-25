@@ -10,8 +10,7 @@
     ],
     "services": [
         {
-            "service-image-name": "username/image",
-            "service-name": "name",
+            "container-name": "name",
             "volumes": [
                 {
                     "source-volume": "volume1",
@@ -20,11 +19,7 @@
             ],
             "networks": [
                 "network1"
-            ],
-            "environment": {
-                "key": "value"
-            },
-            "ram-in-bytes": 31314
+            ]
         }
     ]
 }
