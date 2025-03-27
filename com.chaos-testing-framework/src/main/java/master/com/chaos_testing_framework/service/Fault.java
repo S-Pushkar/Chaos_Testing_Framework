@@ -1,10 +1,10 @@
 package master.com.chaos_testing_framework.service;
 
 import com.github.dockerjava.api.DockerClient;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import master.com.chaos_testing_framework.dto.Status;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public abstract class Fault {
 
     public final DockerClient dockerClient;
