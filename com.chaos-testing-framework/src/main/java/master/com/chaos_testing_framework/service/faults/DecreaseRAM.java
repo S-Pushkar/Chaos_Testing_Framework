@@ -6,7 +6,7 @@ import com.github.dockerjava.api.command.UpdateContainerCmd;
 import lombok.extern.slf4j.Slf4j;
 import master.com.chaos_testing_framework.dto.Status;
 import master.com.chaos_testing_framework.service.Fault;
-import org.jvnet.hk2.annotations.Service;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
