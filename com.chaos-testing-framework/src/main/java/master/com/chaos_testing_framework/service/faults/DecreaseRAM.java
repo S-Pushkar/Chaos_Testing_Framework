@@ -1,12 +1,15 @@
 package master.com.chaos_testing_framework.service.faults;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.InspectContainerCmd;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.UpdateContainerCmd;
+import lombok.extern.slf4j.Slf4j;
 import master.com.chaos_testing_framework.dto.Status;
 import master.com.chaos_testing_framework.service.Fault;
+import org.jvnet.hk2.annotations.Service;
 
+@Slf4j
+@Service
 public class DecreaseRAM extends Fault {
 
     public DecreaseRAM(DockerClient dockerClient) {
@@ -31,7 +34,7 @@ public class DecreaseRAM extends Fault {
 
             return Status.OK;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             return Status.ERROR;
         }
     }
