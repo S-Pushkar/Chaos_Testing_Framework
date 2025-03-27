@@ -30,6 +30,10 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	// https://mvnrepository.com/artifact/com.github.docker-java/docker-java
+	implementation("com.github.docker-java:docker-java:3.4.2")
+	// https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api
+//	implementation("javax.ws.rs:javax.ws.rs-api:2.1.1")
 }
 
 tasks.named('test') {
