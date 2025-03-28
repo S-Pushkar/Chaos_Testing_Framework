@@ -9,6 +9,12 @@ import org.slf4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuration class for Docker client
+ * NOTE: To make this work, you'll need to change /lib/systemd/system/docker.service file such that
+ * ExecStart=/usr/bin/dockerd -H fd:// -H tcp://127.0.0.1:2375 --containerd=/run/containerd/containerd.sock
+ * This will allow the Docker client to connect to the Docker daemon via TCP
+ */
 @Configuration
 public class DockerConfig {
 
