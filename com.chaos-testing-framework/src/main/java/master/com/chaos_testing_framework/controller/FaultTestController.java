@@ -1,6 +1,7 @@
 package master.com.chaos_testing_framework.controller;
 
 import lombok.RequiredArgsConstructor;
+import master.com.chaos_testing_framework.dto.FaultType;
 import master.com.chaos_testing_framework.dto.Status;
 import master.com.chaos_testing_framework.service.Fault;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +14,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class FaultTestController {
 
-    private final Map<String, Fault> faultServices;
+    private final Map<FaultType, Fault> faultServices;
 
     @PostMapping("/{faultType}")
     public ResponseEntity<String> injectFault(
-            @PathVariable String faultType,
+            @PathVariable FaultType faultType,
             @RequestParam String containerName) {
 
         Fault faultService = faultServices.get(faultType);

@@ -1,5 +1,6 @@
 package master.com.chaos_testing_framework.beans;
 
+import master.com.chaos_testing_framework.dto.FaultType;
 import master.com.chaos_testing_framework.service.Fault;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,10 +14,10 @@ import java.util.stream.Collectors;
 public class FaultConfig {
 
     @Bean
-    public Map<String, Fault> faultServices(List<Fault> faults) {
+    public Map<FaultType, Fault> faultServices(List<Fault> faults) {
         return faults.stream()
                 .collect(Collectors.toMap(
-                        fault -> fault.getClass().getSimpleName().toLowerCase(),
+                        Fault::getType,
                         Function.identity()
                 ));
     }

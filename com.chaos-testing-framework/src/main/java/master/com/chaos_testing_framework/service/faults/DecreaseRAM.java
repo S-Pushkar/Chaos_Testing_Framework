@@ -4,6 +4,7 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.command.UpdateContainerCmd;
 import lombok.extern.slf4j.Slf4j;
+import master.com.chaos_testing_framework.dto.FaultType;
 import master.com.chaos_testing_framework.dto.Status;
 import master.com.chaos_testing_framework.service.Fault;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,11 @@ public class DecreaseRAM extends Fault {
 
     public DecreaseRAM(DockerClient dockerClient) {
         super(dockerClient);
+    }
+
+    @Override
+    public FaultType getType() {
+        return FaultType.DECREASE_RAM;
     }
 
     @Override
