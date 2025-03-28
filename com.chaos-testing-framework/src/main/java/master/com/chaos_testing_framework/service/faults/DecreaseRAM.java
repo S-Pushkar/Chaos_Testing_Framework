@@ -29,6 +29,7 @@ public class DecreaseRAM extends Fault {
             Long currentRAM = containerResponse.getHostConfig().getMemory();
 
             if (currentRAM == null || currentRAM <= 0) {
+                log.error("Container does not have any memory limit set");
                 return Status.ERROR;
             }
 
