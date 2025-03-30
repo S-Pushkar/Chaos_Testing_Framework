@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Data
+@Data 
 @Document(collection = "configs")
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class Config {
@@ -19,4 +19,5 @@ public class Config {
 
     private List<MicroService> services;
 
+    private String executionType;
 }

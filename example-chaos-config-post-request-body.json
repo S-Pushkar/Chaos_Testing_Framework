@@ -1,8 +1,32 @@
 {
-    "config_name": "network_demoralizer",
+    "config_name": "mongoverse_ragnorok",
     "services": [
         {
-            "container_name": "name",
+            "container_name": "mongo1",
+            "volumes": [
+                {
+                    "source_volume": "volume1",
+                    "path_in_container": "/root/bin"
+                }
+            ],
+            "networks": [
+                "network1"
+            ]
+        },
+        {
+            "container_name": "mongo2",
+            "volumes": [
+                {
+                    "source_volume": "volume1",
+                    "path_in_container": "/root/bin"
+                }
+            ],
+            "networks": [
+                "network1"
+            ]
+        },
+        {
+            "container_name": "mongo3",
             "volumes": [
                 {
                     "source_volume": "volume1",
@@ -13,6 +37,7 @@
                 "network1"
             ]
         }
-    ]
+    ],
+    "execution_type": "parallel"
 }
 
