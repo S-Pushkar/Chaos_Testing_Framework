@@ -28,7 +28,7 @@ public class FaultTestController {
 
         Status status = faultService.inject(containerName);
         return status == Status.OK ?
-                ResponseEntity.ok(faultType + " injected successfully") :
-                ResponseEntity.badRequest().body("Failed to inject " + faultType);
+                ResponseEntity.ok(faultType + " injected successfully to " + containerName) :
+                ResponseEntity.badRequest().body("Failed to inject " + faultType + " to " + containerName);
     }
 }
