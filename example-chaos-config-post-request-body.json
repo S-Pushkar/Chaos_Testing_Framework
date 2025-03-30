@@ -1,5 +1,5 @@
 {
-    "config_name": "mongoverse_ragnorok",
+    "config_name": "chumma_mongo",
     "services": [
         {
             "container_name": "mongo1",
