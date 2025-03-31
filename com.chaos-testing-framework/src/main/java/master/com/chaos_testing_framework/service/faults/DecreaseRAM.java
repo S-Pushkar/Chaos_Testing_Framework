@@ -2,7 +2,6 @@ package master.com.chaos_testing_framework.service.faults;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.InspectContainerResponse;
-import com.github.dockerjava.api.command.UpdateContainerCmd;
 import lombok.extern.slf4j.Slf4j;
 import master.com.chaos_testing_framework.dto.FaultType;
 import master.com.chaos_testing_framework.dto.Status;
