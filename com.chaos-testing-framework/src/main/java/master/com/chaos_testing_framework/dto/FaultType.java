@@ -4,4 +4,5 @@ public enum FaultType {
     DECREASE_RAM,
     DECREASE_CPUS,
     DISCONNECT_NETWORK,
+    STOP_CONTAINER,
 }
