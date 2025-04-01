@@ -10,35 +10,36 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class DecreaseRAM extends Fault {
+public class DecreaseCPUs extends Fault {
 
-    public DecreaseRAM(DockerClient dockerClient) {
+    public DecreaseCPUs(DockerClient dockerClient) {
         super(dockerClient);
     }
 
     @Override
     public FaultType getType() {
-        return FaultType.DECREASE_RAM;
+        return FaultType.DECREASE_CPUS;
     }
 
     @Override
     public Status inject(String containerName) {
         try {
             InspectContainerResponse containerResponse = dockerClient.inspectContainerCmd(containerName).exec();
-            Long currentRAM = containerResponse.getHostConfig().getMemory();
 
-            if (currentRAM == null || currentRAM <= 0) {
-                log.error("Container {} does not have any memory limit set", containerName);
+            Long cpuQuota = containerResponse.getHostConfig().getCpuQuota();
+
+            if (cpuQuota == null || cpuQuota <= 0) {
+                log.error("Container {} does not have any CPU limit set", containerName);
                 return Status.ERROR;
             }
 
-            long newRAM = currentRAM / 10;
+            int newCpuQuota = (int) (cpuQuota / 10);
 
             dockerClient.updateContainerCmd(containerName)
-                    .withMemory(newRAM)
+                    .withCpuQuota(newCpuQuota)
                     .exec();
 
-            log.info("Decreased RAM of container {} from {} to {}", containerName, currentRAM, newRAM);
+            log.info("Decreased CPU quota of container {} from {} to {}", containerName, cpuQuota, newCpuQuota);
 
             return Status.OK;
         } catch (Exception e) {
