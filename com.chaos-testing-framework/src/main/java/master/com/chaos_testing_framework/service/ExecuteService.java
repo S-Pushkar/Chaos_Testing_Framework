@@ -1,5 +1,8 @@
 package master.com.chaos_testing_framework.service;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -20,13 +23,18 @@ import master.com.chaos_testing_framework.repository.ConfigRepository;
 public class ExecuteService {
     ConfigRepository configRepository;
 
-    private final Map<FaultType, Fault> faultServices;
+    private Map<FaultType, Fault> faultServices;
 
     // 1. Picking the faults randomly
     private FaultType randomFaultPicker() {
         List<FaultType> faultTypes = List.of(FaultType.values());
         int randomIndex = (int) (Math.random() * faultTypes.size());
         return faultTypes.get(randomIndex);
+    }
+
+    private MicroService randomServicePicker(List<MicroService> services) {
+        int randomIndex = (int) (Math.random() * services.size());
+        return services.get(randomIndex);
     }
 
     // 2. Accepting the service and the fault and executing it
@@ -74,6 +82,21 @@ public class ExecuteService {
         });
     }
 
+    public void singletonFaultInjector(List<MicroService> services) {
+        log.info("Choosing to execute SINGLETON-LY");
+        MicroService microService = randomServicePicker(services);
+        FaultType randomFault = randomFaultPicker();
+        long currentTime = ZonedDateTime.ofInstant(Instant.now(), ZoneId.of("Asia/Kolkata"))
+                                        .toInstant()
+                                        .toEpochMilli();
+        Status status = executeFault(microService, randomFault);
+        if (status == Status.OK) {
+            log.info("{} Fault Injection for {} is {}, fault is {}", currentTime, microService.getContainerName(), status.name(), randomFault.name());
+        } else {
+            log.error("{} Fault Injection FAILED for {}, status is {}, fault is {}", currentTime, microService.getContainerName(), status.name(), randomFault.name());
+        }        
+    }
+
     public Status handleExecuteRequest(ExecuteRequest executeRequest) {
         log.info("Received execute request: {}", executeRequest.getConfigName());
         Config config = configRepository.findById(executeRequest.getConfigName()).orElse(null);
@@ -92,7 +115,10 @@ public class ExecuteService {
             case "parallel":
                 parallelFaultInjector(services);
                 break;
-        
+
+            case "singleton":
+                singletonFaultInjector(services);
+                break;
             default: // sequential execution
                 sequentialFaultInjector(services);
                 break;
