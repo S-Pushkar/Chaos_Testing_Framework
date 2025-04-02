@@ -11,9 +11,4 @@ import java.util.List;
 public class MicroService {
 
     private String containerName;
-
-    private List<String> networks;
-
-    private List<Volume> volumes;
-
 }

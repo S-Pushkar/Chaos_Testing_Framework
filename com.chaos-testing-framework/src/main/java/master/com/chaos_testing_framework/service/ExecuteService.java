@@ -25,6 +25,8 @@ public class ExecuteService {
 
     private Map<FaultType, Fault> faultServices;
 
+    private MicroserviceMetadataService microserviceMetadataService;
+
     // 1. Picking the faults randomly
     private FaultType randomFaultPicker() {
         List<FaultType> faultTypes = List.of(FaultType.values());
@@ -98,13 +100,29 @@ public class ExecuteService {
     }
 
     public Status handleExecuteRequest(ExecuteRequest executeRequest) {
-        log.info("Received execute request: {}", executeRequest.getConfigName());
-        Config config = configRepository.findById(executeRequest.getConfigName()).orElse(null);
+        String configName = executeRequest.getConfigName();
+
+        log.info("Received execute request: {}", configName);
+
+        Config config = configRepository.findById(configName).orElse(null);
         if (config == null) {
             return Status.CONFIG_NOT_FOUND;
-        } 
+        }
 
         List<MicroService> services = config.getServices();
+
+        if (services == null || services.isEmpty()) {
+            log.error("No services found in config: {}", configName);
+            return Status.ERROR;
+        }
+
+        Status status = microserviceMetadataService.saveMicroserviceMetadata(configName, services);
+
+        if (status != Status.OK) {
+            log.error("Failed to save microservice metadata for services in config: {}", configName);
+            return status;
+        }
+
         String executionType = config.getExecutionType();
         if (executionType == null) {
             log.error("Execution type is not set in the config, defaulting to SEQUENTIAL");
