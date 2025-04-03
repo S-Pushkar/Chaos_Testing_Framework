@@ -7,7 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
 import master.com.chaos_testing_framework.dto.Status;
+import master.com.chaos_testing_framework.model.MicroserviceMetadata;
 import master.com.chaos_testing_framework.repository.MicroserviceMetadataRepository;
 import master.com.chaos_testing_framework.service.MicroserviceMetadataService;
 import master.com.chaos_testing_framework.service.RollbackContainerService;
@@ -22,6 +24,7 @@ import master.com.chaos_testing_framework.repository.ConfigRepository;
 
 @Getter
 @Component
+@Slf4j
 public class ConfigAndMetadataManager {
     private final Map<String, ConfigManagerValue> configs;
     private final ConfigRepository configRepository;
@@ -46,6 +49,26 @@ public class ConfigAndMetadataManager {
 
     public void rollback(String configName) {
         microserviceMetadataRepository.findByConfigName(configName).forEach(rollbackContainerService::rollbackContainer);
+    }
+
+    public void rollbackRandomContainer(String configName) {
+        List<MicroService> services = configs.get(configName).microService();
+
+        int randomIndex = (int) (Math.random() * services.size());
+
+        MicroService randomService = services.get(randomIndex);
+
+        MicroserviceMetadata microserviceMetadata = microserviceMetadataRepository
+                .findById(randomService.getContainerName())
+                .orElse(null);
+        if (microserviceMetadata == null) {
+            log.error("Microservice " + randomService.getContainerName() + " not found");
+            return;
+        }
+
+        rollbackContainerService.rollbackContainer(microserviceMetadata);
+
+        log.info("Rolled back container {}", microserviceMetadata.getContainerName());
     }
 
     private Status updateMetadata(String configName, List<MicroService> services) {
