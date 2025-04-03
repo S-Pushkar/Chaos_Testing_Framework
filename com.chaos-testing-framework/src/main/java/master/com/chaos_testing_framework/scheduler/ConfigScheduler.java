@@ -12,7 +12,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import master.com.chaos_testing_framework.components.ConfigAndMetadataManager;
 import master.com.chaos_testing_framework.dto.ConfigManagerValue;

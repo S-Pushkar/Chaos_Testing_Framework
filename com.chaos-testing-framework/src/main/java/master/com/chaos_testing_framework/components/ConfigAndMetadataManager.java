@@ -14,7 +14,6 @@ import master.com.chaos_testing_framework.repository.MicroserviceMetadataReposit
 import master.com.chaos_testing_framework.service.MicroserviceMetadataService;
 import master.com.chaos_testing_framework.service.RollbackContainerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import lombok.Getter;
