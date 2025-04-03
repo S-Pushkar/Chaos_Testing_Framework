@@ -1,43 +1,17 @@
+
 {
     "config_name": "chumma_mongo",
     "services": [
         {
-            "container_name": "mongo1",
-            "volumes": [
-                {
-                    "source_volume": "volume1",
-                    "path_in_container": "/root/bin"
-                }
-            ],
-            "networks": [
-                "network1"
-            ]
+            "container_name": "mongo1"
         },
         {
-            "container_name": "mongo2",
-            "volumes": [
-                {
-                    "source_volume": "volume1",
-                    "path_in_container": "/root/bin"
-                }
-            ],
-            "networks": [
-                "network1"
-            ]
+            "container_name": "mongo2"
         },
         {
-            "container_name": "mongo3",
-            "volumes": [
-                {
-                    "source_volume": "volume1",
-                    "path_in_container": "/root/bin"
-                }
-            ],
-            "networks": [
-                "network1"
-            ]
+            "container_name": "mongo3"
         }
-    ],
-    "execution_type": "parallel"
+    ]
 }
+
 

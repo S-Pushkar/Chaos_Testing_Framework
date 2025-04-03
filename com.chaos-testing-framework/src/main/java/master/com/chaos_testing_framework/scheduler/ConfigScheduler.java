@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import master.com.chaos_testing_framework.components.ConfigManager;
+import master.com.chaos_testing_framework.components.ConfigAndMetadataManager;
 import master.com.chaos_testing_framework.dto.ConfigManagerValue;
 import master.com.chaos_testing_framework.dto.MicroService;
 import master.com.chaos_testing_framework.service.ExecuteService;
@@ -22,12 +22,12 @@ import master.com.chaos_testing_framework.service.ExecuteService;
 @Slf4j
 @Service
 public class ConfigScheduler {
-    ConfigManager configManager;
+    ConfigAndMetadataManager configAndMetadataManager;
     ExecuteService executeService;
 
     @Scheduled(fixedDelayString = "2500")
     public void mayhemScheduler() {
-        for (Map.Entry<String, ConfigManagerValue> element : configManager.getConfigs().entrySet()) {
+        for (Map.Entry<String, ConfigManagerValue> element : configAndMetadataManager.getConfigs().entrySet()) {
             List<MicroService> services = element.getValue().microService();
             Long timestamp = element.getValue().timestamp();
 
@@ -43,11 +43,11 @@ public class ConfigScheduler {
                                         .toInstant()
                                         .toEpochMilli();
 
-            long randomSeconds = (long) (5 + Math.random() * (30 - 5 + 1)) * 1000L;
+            long randomSeconds = (long) (5 + Math.random() * (30 - 5)) * 1000L;
 
             // Add random seconds to timestamp
             long newTimeStamp = currentTime + randomSeconds;
-            configManager.update(element.getKey(), services, newTimeStamp);
+            configAndMetadataManager.updateConfigsForChaosTest(element.getKey(), services, newTimeStamp);
         }
     }
 }
