@@ -1,11 +1,11 @@
 package master.com.chaos_testing_framework.controller;
 
+import lombok.AllArgsConstructor;
+import master.com.chaos_testing_framework.components.ConfigAndMetadataManager;
+import master.com.chaos_testing_framework.dto.ExecuteRequest;
 import master.com.chaos_testing_framework.dto.ExecuteResponse;
 import master.com.chaos_testing_framework.dto.Status;
 import master.com.chaos_testing_framework.service.ExecuteService;
-import master.com.chaos_testing_framework.components.ConfigManager;
-import master.com.chaos_testing_framework.dto.ExecuteRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,15 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/execute")
+@AllArgsConstructor
 public class ExecuteController {
 
-    ConfigManager configManager;
+    ConfigAndMetadataManager configAndMetadataManager;
     ExecuteService executeService;
-    @Autowired
-    public ExecuteController(ExecuteService executeService, ConfigManager configManager) {
-        this.executeService = executeService;
-        this.configManager = configManager;
-    }
 
     @GetMapping("/hit")
     public ResponseEntity<Void> hit() {
@@ -45,10 +41,16 @@ public class ExecuteController {
     }
 
     @PostMapping("/addConfig")
-    public ResponseEntity<ExecuteResponse> addConfig(@RequestBody ExecuteRequest request) {
+    public ResponseEntity<String> addConfig(@RequestBody ExecuteRequest request) {
         String configName = request.getConfigName();
-        
-        configManager.update(configName);
+        Status status = configAndMetadataManager.update(configName);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(status.name());
+    }
+
+    @PostMapping("/removeConfig")
+    public ResponseEntity<ExecuteResponse> removeConfig(@RequestBody ExecuteRequest request) {
+        configAndMetadataManager.remove(request.getConfigName());
+        configAndMetadataManager.rollback(request.getConfigName());
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
