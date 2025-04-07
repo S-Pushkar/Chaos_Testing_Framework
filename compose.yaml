@@ -1,0 +1,56 @@
+services:
+  mongo1:
+    image: mongo
+    container_name: mongo1
+    ports:
+      - "27018:27017"
+    mem_limit: 2048m
+    cpu_quota: 20000
+    cpu_period: 1000
+    deploy:
+      resources:
+        limits:
+          # cpus: '0.2'
+          memory: 2048M
+    networks:
+      - mongo_network
+    restart: always
+
+  mongo2:
+    image: mongo
+    container_name: mongo2
+    ports:
+      - "27019:27017"
+    mem_limit: 2048m
+    cpu_quota: 20000
+    cpu_period: 1000
+    deploy:
+      resources:
+        limits:
+          # cpus: '0.2'
+          memory: 2048M
+    networks:
+      - mongo_network
+    restart: always
+
+  mongo3:
+    image: mongo
+    container_name: mongo3
+    ports:
+      - "27020:27017"
+    mem_limit: 2048m
+    cpu_quota: 20000
+    cpu_period: 1000
+    deploy:
+      resources:
+        limits:
+          # cpus: '0.2'
+          memory: 2048M
+    networks:
+      - mongo_network
+    restart: always
+
+networks:
+  mongo_network:
+    driver: bridge
+
