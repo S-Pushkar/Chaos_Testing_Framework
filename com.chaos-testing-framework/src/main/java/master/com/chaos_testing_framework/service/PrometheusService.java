@@ -23,25 +23,6 @@ public class PrometheusService {
         this.meterRegistry = meterRegistry;
     }
 
-    public void incrementCounter(String counterName) {
-        meterRegistry.counter(counterName).increment();
-    }
-
-    public void updateMemory (String counterName , long memory) {
-//        meterRegistry.counter(counterName, "metricType", "memory").increment(memory);
-
-//        Counter counter = Counter.builder(counterName)
-//                .tag("metricType", "memory")
-//                .register(meterRegistry);
-//
-//        counter.increment(memory);
-
-        meterRegistry.gauge(counterName, memory);
-    }
-
-    public void updateContainerStatus(String containerName){
-
-    }
     public void updateChanges() {
         containerMetricsMap.forEach((containerName, containerMetrics) -> {
             Gauge.builder(containerName, containerMetrics.allottedMemoryMb, AtomicLong::get)

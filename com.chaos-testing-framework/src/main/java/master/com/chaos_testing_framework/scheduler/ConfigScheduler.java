@@ -80,12 +80,37 @@ public class ConfigScheduler {
     }
 
     @Scheduled(fixedDelayString = "1000")
-    public void mayhemWatcher(){
+    public void mayhemWatcher() {
         for (Map.Entry<String, ConfigManagerValue> element : configAndMetadataManager.getConfigs().entrySet()){
             List<MicroService> services = element.getValue().microService();
             for (MicroService microService : services) {
                 String containerName = microService.getContainerName();
                 InspectContainerResponse containerResponse = dockerClient.inspectContainerCmd(containerName).exec();
+
+                boolean isRunning = Boolean.TRUE.equals(containerResponse.getState().getRunning());
+
+                if (!isRunning) {
+                    long memoryLimit = containerResponse.getHostConfig().getMemory() / (1024 * 1024);
+                    long cpuQuota = containerResponse.getHostConfig().getCpuQuota();
+                    long memoryUsage = 0;
+                    int memoryUsagePercentage = 0;
+
+                    prometheusService.updateCpuQuota(containerName, cpuQuota);
+                    prometheusService.updateChanges();
+
+                    prometheusService.updateMemoryUsage(containerName, memoryUsage);
+                    prometheusService.updateChanges();
+
+                    prometheusService.updateMemoryAllocated(containerName, memoryLimit);
+                    prometheusService.updateChanges();
+
+                    prometheusService.updateMemoryUsagePercentage(containerName, memoryUsagePercentage);
+                    prometheusService.updateChanges();
+
+                    prometheusService.setContainerAlive(containerName, false);
+                    prometheusService.updateChanges();
+                    continue;
+                }
 
                 dockerClient.statsCmd(containerName).exec(new ResultCallback<Statistics>() {
                     @Override
@@ -100,10 +125,7 @@ public class ConfigScheduler {
                             log.error("Missing container metrics or inspect data for container: {}", containerName);
                             return;
                         }
-//                        Long allocatedRAM = containerResponse.getHostConfig().getMemory();
-//
-//                        prometheusService.updateMemoryAllocated(containerName,allocatedRAM);
-//                        prometheusService.updateChanges();
+
                         long used = object.getMemoryStats().getUsage();
                         long limit = object.getMemoryStats().getLimit();
                         long usageMb = used/(1024*1024);
@@ -122,7 +144,7 @@ public class ConfigScheduler {
                         prometheusService.updateCpuQuota(containerName,cpuQuota);
                         prometheusService.updateChanges();
 
-                        boolean alive = containerResponse.getState().getRunning();
+                        boolean alive = Boolean.TRUE.equals(containerResponse.getState().getRunning());
                         prometheusService.setContainerAlive(containerName, alive);
                         prometheusService.updateChanges();
                     }
