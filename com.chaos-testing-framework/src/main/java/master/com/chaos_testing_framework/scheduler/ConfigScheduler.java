@@ -86,39 +86,63 @@ public class ConfigScheduler {
             for (MicroService microService : services) {
                 String containerName = microService.getContainerName();
                 InspectContainerResponse containerResponse = dockerClient.inspectContainerCmd(containerName).exec();
-                Long currentRAM = containerResponse.getHostConfig().getMemory();
-                System.out.println(currentRAM);
-                prometheusService.updateMemory(containerName, currentRAM);
-//                dockerClient.statsCmd(containerName).exec(new ResultCallback<Statistics>() {
-//                    @Override
-//                    public void onStart(Closeable closeable) {
+
+                dockerClient.statsCmd(containerName).exec(new ResultCallback<Statistics>() {
+                    @Override
+                    public void onStart(Closeable closeable) {
+
+                    }
+
+                    @Override
+                    public void onNext(Statistics object) {
+                        if (object == null || object.getMemoryStats() == null || containerResponse == null ||
+                                containerResponse.getHostConfig() == null || containerResponse.getState() == null) {
+                            log.error("Missing container metrics or inspect data for container: {}", containerName);
+                            return;
+                        }
+//                        Long allocatedRAM = containerResponse.getHostConfig().getMemory();
 //
-//                    }
-//
-//                    @Override
-//                    public void onNext(Statistics object) {
-////                        System.out.println(object.getMemoryStats().getUsage());
-//                        long memory = object.getMemoryStats().getUsage();
-//                         prometheusService.updateMemory(containerName, memory);
-//
-//                    }
-//
-//
-//                    @Override
-//                    public void onError(Throwable throwable) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//
-//                    }
-//
-//                    @Override
-//                    public void close() throws IOException {
-//
-//                    }
-//                });
+//                        prometheusService.updateMemoryAllocated(containerName,allocatedRAM);
+//                        prometheusService.updateChanges();
+                        long used = object.getMemoryStats().getUsage();
+                        long limit = object.getMemoryStats().getLimit();
+                        long usageMb = used/(1024*1024);
+                        long allocatedMb = limit/(1024*1024);
+
+                        int percentage = limit > 0 ?(int)((double)used/limit * 100):0;
+
+                        prometheusService.updateMemoryUsage(containerName,usageMb);
+                        prometheusService.updateChanges();
+                        prometheusService.updateMemoryAllocated(containerName,allocatedMb);
+                        prometheusService.updateChanges();
+                        prometheusService.updateMemoryUsagePercentage(containerName,percentage);
+                        prometheusService.updateChanges();
+
+                        long cpuQuota = containerResponse.getHostConfig().getCpuQuota();
+                        prometheusService.updateCpuQuota(containerName,cpuQuota);
+                        prometheusService.updateChanges();
+
+                        boolean alive = containerResponse.getState().getRunning();
+                        prometheusService.setContainerAlive(containerName, alive);
+                        prometheusService.updateChanges();
+                    }
+
+
+                    @Override
+                    public void onError(Throwable throwable) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void close() throws IOException {
+
+                    }
+                });
             }
         }
     }
