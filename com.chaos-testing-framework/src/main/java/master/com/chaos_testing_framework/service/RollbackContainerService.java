@@ -22,7 +22,7 @@ public class RollbackContainerService {
 
         try {
 
-            Integer cpuQuota = Integer.parseInt(String.valueOf(microserviceMetadata.getCpuQuota()));
+            Long cpuQuota = Long.parseLong(String.valueOf(microserviceMetadata.getCpuQuota()));
 
             Long memoryLimit = microserviceMetadata.getMemoryLimit();
 

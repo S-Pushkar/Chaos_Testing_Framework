@@ -33,7 +33,7 @@ public class DecreaseCPUs extends Fault {
                 return Status.ERROR;
             }
 
-            int newCpuQuota = (int) (cpuQuota / 10);
+            long newCpuQuota = (cpuQuota / 10);
 
             dockerClient.updateContainerCmd(containerName)
                     .withCpuQuota(newCpuQuota)
